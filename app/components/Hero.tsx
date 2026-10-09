@@ -1,11 +1,11 @@
-import Image from "next/image";
+import Image from 'next/image';
 
 export default function Hero() {
-  const today = new Intl.DateTimeFormat("bn-BD", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
+  const today = new Intl.DateTimeFormat('bn-BD', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
   }).format(new Date());
 
   return (
@@ -26,14 +26,17 @@ export default function Hero() {
               </h1>
 
               <p className="mt-5 max-w-xl text-gray-600 leading-8">
-                চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম — বাজারভিত্তিক বিস্তারিত, গড়, সর্বনিম্ন-সর্বাধিক এবং দামের পরিবর্তন এক জায়গায়।
-
-
+                চাল, ডাল, তেল, সবজি, মাছ, মাংস, ডিম ও মসলার দাম — বাজারভিত্তিক
+                বিস্তারিত, গড়, সর্বনিম্ন-সর্বাধিক এবং দামের পরিবর্তন এক
+                জায়গায়।
               </p>
 
-              <button className="mt-8 rounded-xl bg-green-600 px-6 py-3 font-semibold text-white hover:bg-green-700 transition">
+              <a
+                href="#সব-পণ্য"
+                className="mt-8 inline-flex rounded-xl bg-green-600 px-6 py-3 font-semibold text-white transition hover:bg-green-700"
+              >
                 সব পণ্য দেখুন
-              </button>
+              </a>
             </div>
 
             {/* Right */}

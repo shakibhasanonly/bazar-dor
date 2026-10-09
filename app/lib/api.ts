@@ -7,15 +7,30 @@ export interface Category {
   icon: string;
 }
 
+
 export interface Product {
   id: number;
-  name: string;
   slug: string;
+  nameBn: string;
   category: string;
-  emoji: string;
+  categoryNameBn: string;
+  categoryIcon: string;
   unit: string;
-  price: number;
-  change: number;
+  image: string;
+  today: number;
+  yesterday: number;
+  lastWeek: number;
+  lastMonth: number;
+  change: {
+    dir: "up" | "down" | "flat";
+    pct: number;
+  };
+  markets: {
+    market: string;
+    division: string;
+    min: number;
+    max: number;
+  }[];
 }
 
 export async function getCategories(): Promise<Category[]> {
