@@ -1,4 +1,5 @@
 
+import PriceTicker from "./PriceTicker";
 import CategoryNav from "./CategoryNav";
 import Image from "next/image";
 import Link from "next/link";
@@ -51,6 +52,7 @@ export default function Navbar() {
         </div>
       </div>
       <CategoryNav />
+      <PriceTicker />
     </header>
   );
 }
