@@ -1,4 +1,4 @@
-const BASE_URL = "https://api.api-store.workers.dev/api/bazardor";
+const BASE_URL = 'https://openapi.programming-hero.com/api/bazardor';
 
 export interface Category {
   id: string;
@@ -6,7 +6,6 @@ export interface Category {
   nameBn: string;
   icon: string;
 }
-
 
 export interface Product {
   id: number;
@@ -22,7 +21,7 @@ export interface Product {
   lastWeek: number;
   lastMonth: number;
   change: {
-    dir: "up" | "down" | "flat";
+    dir: 'up' | 'down' | 'flat';
     pct: number;
   };
   markets: {
@@ -35,11 +34,11 @@ export interface Product {
 
 export async function getCategories(): Promise<Category[]> {
   const res = await fetch(`${BASE_URL}/categories`, {
-    cache: "no-store",
+    cache: 'no-store',
   });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch categories");
+    throw new Error('Failed to fetch categories');
   }
 
   return res.json();
@@ -47,11 +46,11 @@ export async function getCategories(): Promise<Category[]> {
 
 export async function getProducts(): Promise<Product[]> {
   const res = await fetch(`${BASE_URL}/products`, {
-    cache: "no-store",
+    cache: 'no-store',
   });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch products");
+    throw new Error('Failed to fetch products');
   }
 
   return res.json();
@@ -59,27 +58,27 @@ export async function getProducts(): Promise<Product[]> {
 
 export async function getProductsByCategory(slug: string): Promise<Product[]> {
   const res = await fetch(
-    `${BASE_URL}/products?category=${slug}`,
+    `${BASE_URL}/products?category=${encodeURIComponent(slug)}`,
     {
-      cache: "no-store",
-    }
+      cache: 'no-store',
+    },
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch category products");
+    throw new Error('Failed to fetch category products');
   }
 
   return res.json();
 }
 
-export async function getProduct(id: string) {
-  const res = await fetch(`${BASE_URL}/products/${id}`, {
-    cache: "no-store",
-  });
+export async function getProduct(slug: string): Promise<Product> {
+  const products = await getProducts();
 
-  if (!res.ok) {
-    throw new Error("Product not found");
+  const product = products.find(item => item.slug === slug);
+
+  if (!product) {
+    throw new Error('Product not found');
   }
 
-  return res.json();
+  return product;
 }

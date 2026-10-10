@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getProducts } from '../lib/api';
 import type { Product } from '../lib/api';
+import AllProducts from './AllProducts';
 
 function formatPrice(value: number) {
   return Number(value).toLocaleString('bn-BD');
@@ -107,6 +108,7 @@ export default async function ProductSection() {
         className="min-h-screen bg-[#f4f8f3] px-4 pb-10 pt-5 sm:pt-6"
       >
         <div className="mx-auto w-full max-w-7xl">
+          {/* আজ দাম বেড়েছে */}
           <section className="mb-6">
             <SectionHeading icon="▲" title="আজ দাম বেড়েছে" />
 
@@ -123,6 +125,7 @@ export default async function ProductSection() {
             )}
           </section>
 
+          {/* আজ দাম কমেছে */}
           <section className="mb-6">
             <SectionHeading icon="▼" title="আজ দাম কমেছে" />
 
@@ -139,24 +142,11 @@ export default async function ProductSection() {
             )}
           </section>
 
+          {/* সব পণ্য */}
           <section id="সব-পণ্য" className="scroll-mt-40">
             <SectionHeading title="সব পণ্য" />
 
-            <p className="mb-3 text-[10px] text-[#737b73]">
-              মোট {formatPrice(products.length)}টি পণ্যের বাজারদর
-            </p>
-
-            {products.length > 0 ? (
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {products.map(product => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            ) : (
-              <p className="rounded-xl border border-[#e1e9e2] bg-[#fbfdfb] p-4 text-xs text-gray-500">
-                এখনো কোনো পণ্যের তথ্য পাওয়া যায়নি।
-              </p>
-            )}
+            <AllProducts products={products} />
           </section>
         </div>
       </main>
