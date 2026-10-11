@@ -44,7 +44,7 @@ export default function SignUpPage() {
       toast.success('অ্যাকাউন্ট তৈরি হয়েছে।');
 
       window.setTimeout(() => {
-        window.location.href = '/';
+        window.location.href = '/signin';
       }, 1000);
     } catch {
       toast.error('সার্ভারে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
