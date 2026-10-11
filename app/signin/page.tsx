@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { signIn } from '@/app/lib/auth-client';
 
 function getReturnTo(): string {
@@ -9,7 +10,6 @@ function getReturnTo(): string {
     'callbackUrl',
   );
 
-  // শুধু একই ওয়েবসাইটের internal path গ্রহণ করবে
   if (
     callbackUrl?.startsWith('/') &&
     !callbackUrl.startsWith('//') &&
@@ -26,12 +26,10 @@ export default function SignInPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState(false);
-  const [error, setError] = useState('');
 
   async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
-    setError('');
 
     try {
       const returnTo = getReturnTo();
@@ -43,28 +41,39 @@ export default function SignInPage() {
       });
 
       if (result.error) {
-        setError(result.error.message || 'সাইন ইন করা যায়নি।');
+        toast.error(result.error.message || 'ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।');
+        return;
       }
+
+      toast.success('সফলভাবে সাইন ইন হয়েছে!');
+
+      window.setTimeout(() => {
+        window.location.href = returnTo;
+      }, 1000);
     } catch {
-      setError('সার্ভারে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+      toast.error('সার্ভারে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
     } finally {
       setLoading(false);
     }
   }
 
   async function handleSocialSignIn(provider: 'google' | 'github') {
-    setError('');
     setSocialLoading(true);
 
     try {
       const returnTo = getReturnTo();
 
-      await signIn.social({
+      const result = await signIn.social({
         provider,
         callbackURL: returnTo,
       });
+
+      if (result?.error) {
+        toast.error(result.error.message || 'সোশ্যাল লগইন চালু করা যায়নি।');
+        setSocialLoading(false);
+      }
     } catch {
-      setError('সোশ্যাল লগইন চালু করা যায়নি।');
+      toast.error('সোশ্যাল লগইন চালু করা যায়নি।');
       setSocialLoading(false);
     }
   }
@@ -123,15 +132,6 @@ export default function SignInPage() {
                 className="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-900 outline-none transition placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-100"
               />
             </div>
-
-            {error && (
-              <p
-                role="alert"
-                className="rounded-lg bg-red-50 p-3 text-sm text-red-700"
-              >
-                {error}
-              </p>
-            )}
 
             <button
               type="submit"
