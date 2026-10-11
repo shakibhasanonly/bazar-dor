@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import { signOut } from '@/app/lib/auth-client';
 
 type UserMenuProps = {
@@ -49,17 +50,25 @@ export default function UserMenu({ name, email, image }: UserMenuProps) {
     try {
       const result = await signOut();
 
-      if (result.error) {
-        setError('সাইন আউট করা যায়নি। আবার চেষ্টা করুন।');
+      if (result?.error) {
+        const message = 'সাইন আউট করা যায়নি। আবার চেষ্টা করুন।';
+
+        setError(message);
+        toast.error(message);
         setLoading(false);
         return;
       }
 
       setOpen(false);
+      toast.success('সফলভাবে লগআউট হয়েছে!');
+
       router.replace('/signin');
       router.refresh();
     } catch {
-      setError('সাইন আউট করতে সমস্যা হয়েছে।');
+      const message = 'সাইন আউট করতে সমস্যা হয়েছে।';
+
+      setError(message);
+      toast.error(message);
       setLoading(false);
     }
   }
@@ -151,9 +160,11 @@ export default function UserMenu({ name, email, image }: UserMenuProps) {
             className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-red-600 transition hover:bg-red-50 disabled:opacity-50"
           >
             <span aria-hidden="true">↩</span>
+
             <span>{loading ? 'সাইন আউট হচ্ছে...' : 'সাইন আউট'}</span>
           </button>
 
+          {/* Error Message */}
           {error && (
             <p role="alert" className="px-3 py-2 text-xs text-red-600">
               {error}
