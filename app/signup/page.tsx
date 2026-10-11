@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { signIn, signUp } from '@/app/lib/auth-client';
+import toast from 'react-hot-toast';
 
 export default function SignUpPage() {
   const [name, setName] = useState('');
@@ -11,21 +12,17 @@ export default function SignUpPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
   async function handleSignUp(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError('');
-    setSuccess('');
 
     if (password.length < 8) {
-      setError('পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।');
+      toast.error('পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে।');
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('দুটি পাসওয়ার্ড মিলছে না।');
+      toast.error('দুটি পাসওয়ার্ড মিলছে না।');
       return;
     }
 
@@ -40,19 +37,23 @@ export default function SignUpPage() {
       });
 
       if (result.error) {
-        setError(result.error.message || 'অ্যাকাউন্ট তৈরি করা যায়নি।');
-      } else {
-        setSuccess('অ্যাকাউন্ট তৈরি হয়েছে।');
+        toast.error(result.error.message || 'অ্যাকাউন্ট তৈরি করা যায়নি।');
+        return;
       }
+
+      toast.success('অ্যাকাউন্ট তৈরি হয়েছে।');
+
+      window.setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
     } catch {
-      setError('সার্ভারে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+      toast.error('সার্ভারে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
     } finally {
       setLoading(false);
     }
   }
 
   async function handleSocialSignUp(provider: 'google' | 'github') {
-    setError('');
     setSocialLoading(provider);
 
     try {
@@ -62,11 +63,11 @@ export default function SignUpPage() {
       });
 
       if (result?.error) {
-        setError(result.error.message || 'সোশ্যাল লগইন চালু করা যায়নি।');
+        toast.error(result.error.message || 'সোশ্যাল সাইন আপ চালু করা যায়নি।');
         setSocialLoading('');
       }
     } catch {
-      setError('সোশ্যাল লগইন চালু করা যায়নি।');
+      toast.error('সোশ্যাল সাইন আপ চালু করা যায়নি।');
       setSocialLoading('');
     }
   }
@@ -176,26 +177,6 @@ export default function SignUpPage() {
               />
             </div>
 
-            {/* Error */}
-            {error && (
-              <p
-                role="alert"
-                className="rounded-lg bg-red-50 p-3 text-sm text-red-700"
-              >
-                {error}
-              </p>
-            )}
-
-            {/* Success */}
-            {success && (
-              <p
-                role="status"
-                className="rounded-lg bg-green-50 p-3 text-sm text-green-700"
-              >
-                {success}
-              </p>
-            )}
-
             {/* Sign Up Button */}
             <button
               type="submit"
@@ -234,7 +215,7 @@ export default function SignUpPage() {
                 />
                 <path
                   fill="#4285F4"
-                  d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.75 7.18l7.73 6C44.42 38.02 46.98 31.9 46.98 24.55Z"
+                  d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.75 7.18l7.73 6C44.42 38.42 46.98 31.9 46.98 24.55Z"
                 />
                 <path
                   fill="#FBBC05"

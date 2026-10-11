@@ -35,7 +35,12 @@ export default function RootLayout({
 
         <Footer />
 
-        <Toaster position="top-right" />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 3000,
+          }}
+        />
       </body>
     </html>
   );
